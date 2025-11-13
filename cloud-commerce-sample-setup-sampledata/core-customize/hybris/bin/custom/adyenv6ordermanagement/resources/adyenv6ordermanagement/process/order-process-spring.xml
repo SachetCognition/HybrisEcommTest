@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+		http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+	<context:annotation-config/>
+
+	<!--Step of order-process that checks if new orders are already completed-->
+	<alias name="defaultAdyenCheckNewOrderAction" alias="adyenCheckNewOrderAction"/>
+	<bean id="defaultAdyenCheckNewOrderAction" class="com.adyen.v6.actions.order.AdyenCheckNewOrderAction" parent="abstractAction"/>
+
+	<!--Step of order-process that checks if order in pending status is already completed -->
+	<alias name="defaultAdyenCheckPendingOrderAction" alias="adyenCheckPendingOrderAction"/>
+	<bean id="defaultAdyenCheckPendingOrderAction" class="com.adyen.v6.actions.order.AdyenCheckPendingOrderAction" parent="abstractAction"/>
+
+	<!--Step of order-process that checks authorization completion-->
+	<alias name="defaultAdyenCheckAuthorizationAction" alias="adyenCheckAuthorizationAction"/>
+	<bean id="defaultAdyenCheckAuthorizationAction" class="com.adyen.v6.actions.order.AdyenCheckAuthorizationAction" parent="abstractAction" >
+		<constructor-arg ref="adyenPaymentServiceFactory" name="adyenPaymentServiceFactory"/>
+		<constructor-arg ref="baseStoreService" name="baseStoreService"/>
+	</bean>
+
+	<!--Step of order-process that checks capture completion-->
+	<alias name="defaultAdyenCheckCaptureAction" alias="adyenCheckCaptureAction"/>
+	<bean id="defaultAdyenCheckCaptureAction" class="com.adyen.v6.actions.order.AdyenCheckCaptureAction" parent="abstractAction" />
+
+	<!--Step of order-process that does the cancellation for AdyenTransactions-->
+	<alias name="defaultAdyenCancelOrRefundAction" alias="adyenCancelOrRefundAction"/>
+	<bean id="defaultAdyenCancelOrRefundAction" class="com.adyen.v6.actions.order.AdyenCancelOrRefundAction" parent="abstractAction">
+		<property name="paymentService" ref="paymentService"/>
+	</bean>
+</beans>
